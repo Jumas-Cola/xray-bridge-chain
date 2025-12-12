@@ -1,0 +1,15 @@
+services:
+  xray-upstream:
+    image: teddysun/xray
+    container_name: xray-upstream
+    restart: always
+    ports:
+      - "13335:13335/tcp"
+    volumes:
+      - ./config.json:/etc/xray/config.json:ro
+    networks:
+      - xray_net
+
+networks:
+  xray_net:
+    driver: bridge

@@ -1,0 +1,50 @@
+{
+    "log": {
+        "loglevel": "warning"
+    },
+    "inbounds": [
+        {
+            "port": 13335,
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "UPSTREAM-UUID",
+                        "flow": "xtls-rprx-vision"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "reality",
+                "realitySettings": {
+                    "show": false,
+                    "dest": "gosuslugi.ru:443",
+                    "serverNames": [
+                        "gosuslugi.ru",
+                        "www.gosuslugi.ru",
+                        "esia.gosuslugi.ru"
+                    ],
+                    "privateKey": "UPSTREAM-PRIVATE-KEY",
+                    "shortIds": [
+                        "",
+                        "0123456789abcdef"
+                    ],
+                    "fingerprint": "chrome"
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {}
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {},
+            "tag": "blocked"
+        }
+    ]
+}

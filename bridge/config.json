@@ -1,0 +1,70 @@
+{
+    "log": {
+        "loglevel": "warning"
+    },
+    "inbounds": [
+        {
+            "port": 13335,
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "YOUR-UUID-HERE",
+                        "flow": "xtls-rprx-vision"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "reality",
+                "realitySettings": {
+                    "show": false,
+                    "dest": "www.sberbank.ru:443",
+                    "serverNames": [
+                        "www.sberbank.ru",
+                        "www.vk.com",
+                        "yandex.ru",
+                        "mail.ru"
+                    ],
+                    "privateKey": "YOUR-BRIDGE-PRIVATE-KEY",
+                    "shortIds": [
+                        "",
+                        "0123456789abcdef"
+                    ],
+                    "fingerprint": "chrome"
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "UPSTREAM-SERVER-IP",
+                        "port": 13335,
+                        "users": [
+                            {
+                                "id": "UPSTREAM-UUID",
+                                "encryption": "none",
+                                "flow": "xtls-rprx-vision"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "reality",
+                "realitySettings": {
+                    "serverName": "gosuslugi.ru",
+                    "fingerprint": "chrome",
+                    "publicKey": "UPSTREAM-PUBLIC-KEY",
+                    "shortId": "0123456789abcdef"
+                }
+            }
+        }
+    ]
+}
