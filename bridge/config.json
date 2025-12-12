@@ -61,7 +61,7 @@
                 "realitySettings": {
                     "serverName": "gosuslugi.ru",
                     "fingerprint": "chrome",
-                    "publicKey": "UPSTREAM-PUBLIC-KEY",
+                    "publicKey": "UPSTREAM-PASSWORD",
                     "shortId": "0123456789abcdef"
                 }
             }
