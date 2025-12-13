@@ -9,7 +9,7 @@
             "settings": {
                 "clients": [
                     {
-                        "id": "YOUR-UUID-HERE",
+                        "id": "BRIDGE-UUID",
                         "flow": "xtls-rprx-vision"
                     }
                 ],
@@ -26,7 +26,7 @@
                         "www.yandex.ru",
                         "mail.yandex.ru"
                     ],
-                    "privateKey": "YOUR-BRIDGE-PRIVATE-KEY",
+                    "privateKey": "BRIDGE-PRIVATE-KEY",
                     "shortIds": [
                         "",
                         "0123456789abcdef"
