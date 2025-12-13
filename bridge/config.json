@@ -20,19 +20,17 @@
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
-                    "dest": "www.sberbank.ru:443",
+                    "dest": "yandex.ru:443",
                     "serverNames": [
-                        "www.sberbank.ru",
-                        "www.vk.com",
                         "yandex.ru",
-                        "mail.ru"
+                        "www.yandex.ru",
+                        "mail.yandex.ru"
                     ],
                     "privateKey": "YOUR-BRIDGE-PRIVATE-KEY",
                     "shortIds": [
                         "",
                         "0123456789abcdef"
-                    ],
-                    "fingerprint": "chrome"
+                    ]
                 }
             }
         }
@@ -59,7 +57,7 @@
                 "network": "tcp",
                 "security": "reality",
                 "realitySettings": {
-                    "serverName": "gosuslugi.ru",
+                    "serverName": "www.sberbank.ru",
                     "fingerprint": "chrome",
                     "publicKey": "UPSTREAM-PASSWORD",
                     "shortId": "0123456789abcdef"
