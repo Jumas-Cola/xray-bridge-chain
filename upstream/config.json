@@ -20,11 +20,10 @@
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
-                    "dest": "gosuslugi.ru:443",
+                    "dest": "www.sberbank.ru:443",
                     "serverNames": [
-                        "gosuslugi.ru",
-                        "www.gosuslugi.ru",
-                        "esia.gosuslugi.ru"
+                        "www.sberbank.ru",
+                        "online.sberbank.ru"
                     ],
                     "privateKey": "UPSTREAM-PRIVATE-KEY",
                     "shortIds": [
