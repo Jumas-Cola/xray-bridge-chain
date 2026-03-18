@@ -18,14 +18,14 @@ echo ""
 echo "3. Reality ключи для Bridge:"
 BRIDGE_KEYS=$(docker run --rm teddysun/xray xray x25519)
 BRIDGE_PRIVATE=$(echo "$BRIDGE_KEYS" | grep "Private key:" | awk '{print $3}')
-BRIDGE_PUBLIC=$(echo "$BRIDGE_KEYS" | grep "Password:" | awk '{print $2}')
+BRIDGE_PUBLIC=$(echo "$BRIDGE_KEYS" | grep "Public key:" | awk '{print $3}')
 echo "$BRIDGE_KEYS"
 echo ""
 
 echo "4. Reality ключи для Upstream:"
 UPSTREAM_KEYS=$(docker run --rm teddysun/xray xray x25519)
 UPSTREAM_PRIVATE=$(echo "$UPSTREAM_KEYS" | grep "Private key:" | awk '{print $3}')
-UPSTREAM_PUBLIC=$(echo "$UPSTREAM_KEYS" | grep "Password:" | awk '{print $2}')
+UPSTREAM_PUBLIC=$(echo "$UPSTREAM_KEYS" | grep "Public key:" | awk '{print $3}')
 echo "$UPSTREAM_KEYS"
 echo ""
 
@@ -39,11 +39,11 @@ echo ""
 
 
 echo "Ссылка для подключения к Upstream (вставьте UPSTREAM_SERVER_IP):"
-echo "vless://$UPSTREAM_UUID@UPSTREAM_SERVER_IP:13335?encryption=none&flow=xtls-rprx-vision&security=reality&sni=gosuslugi.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=0123456789abcdef&type=tcp&headerType=none#Upstream-Reality"
+echo "vless://$UPSTREAM_UUID@UPSTREAM_SERVER_IP:13335?encryption=none&security=reality&sni=www.sberbank.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Upstream-Reality"
 echo ""
 
 echo "Ссылка для подключения к Bridge (вставьте BRIDGE_SERVER_IP):"
-echo "vless://$BRIDGE_UUID@BRIDGE_SERVER_IP:13335?encryption=none&flow=xtls-rprx-vision&security=reality&sni=yandex.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=0123456789abcdef&type=tcp#Bridge-Yandex"
+echo "vless://$BRIDGE_UUID@BRIDGE_SERVER_IP:13335?encryption=none&security=reality&sni=yandex.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Yandex"
 echo ""
 
 

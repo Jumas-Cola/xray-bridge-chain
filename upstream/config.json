@@ -9,14 +9,13 @@
             "settings": {
                 "clients": [
                     {
-                        "id": "UPSTREAM-UUID",
-                        "flow": "xtls-rprx-vision"
+                        "id": "UPSTREAM-UUID"
                     }
                 ],
                 "decryption": "none"
             },
             "streamSettings": {
-                "network": "tcp",
+                "network": "xhttp",
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
@@ -30,6 +29,13 @@
                         "",
                         "0123456789abcdef"
                     ]
+                },
+                "xhttpSettings": {
+                    "path": "/api/v1/data",
+                    "mode": "auto",
+                    "extra": {
+                        "xPaddingBytes": "100-1000"
+                    }
                 }
             }
         }

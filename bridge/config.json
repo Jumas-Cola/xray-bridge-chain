@@ -9,14 +9,13 @@
             "settings": {
                 "clients": [
                     {
-                        "id": "BRIDGE-UUID",
-                        "flow": "xtls-rprx-vision"
+                        "id": "BRIDGE-UUID"
                     }
                 ],
                 "decryption": "none"
             },
             "streamSettings": {
-                "network": "tcp",
+                "network": "xhttp",
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
@@ -31,6 +30,13 @@
                         "",
                         "0123456789abcdef"
                     ]
+                },
+                "xhttpSettings": {
+                    "path": "/api/v1/data",
+                    "mode": "auto",
+                    "extra": {
+                        "xPaddingBytes": "100-1000"
+                    }
                 }
             }
         }
@@ -46,21 +52,27 @@
                         "users": [
                             {
                                 "id": "UPSTREAM-UUID",
-                                "encryption": "none",
-                                "flow": "xtls-rprx-vision"
+                                "encryption": "none"
                             }
                         ]
                     }
                 ]
             },
             "streamSettings": {
-                "network": "tcp",
+                "network": "xhttp",
                 "security": "reality",
                 "realitySettings": {
                     "serverName": "www.sberbank.ru",
                     "fingerprint": "chrome",
                     "publicKey": "UPSTREAM-PASSWORD",
                     "shortId": "0123456789abcdef"
+                },
+                "xhttpSettings": {
+                    "path": "/api/v1/data",
+                    "mode": "auto",
+                    "extra": {
+                        "xPaddingBytes": "100-1000"
+                    }
                 }
             }
         }
