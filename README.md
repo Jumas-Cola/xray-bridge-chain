@@ -29,9 +29,9 @@ graph TD;
 
 ### Для Bridge сервера (dest + serverNames):
 
-- www.sberbank.ru - Сбербанк
+- vk.ru - ВКонтакте
 - www.vk.com - ВКонтакте
-- yandex.ru - Яндекс
+- m.vk.ru - ВКонтакте мобильный
 - mail.ru - Mail.ru
 - www.tinkoff.ru - Тинькофф
 - www.ozon.ru - Озон
@@ -50,7 +50,7 @@ graph TD;
 - Выбор домена для dest: Должен поддерживать TLS 1.3 и HTTP/2. Проверьте:
 
 ```bash
-curl -I --tlsv1.3 --http2 https://www.sberbank.ru
+curl -I --tlsv1.3 --http2 https://vk.ru
 ```
 
 - serverNames: Может содержать несколько доменов, клиент выбирает один случайно.

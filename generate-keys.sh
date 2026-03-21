@@ -39,11 +39,11 @@ echo ""
 
 
 echo "Ссылка для подключения к Upstream (вставьте UPSTREAM_SERVER_IP):"
-echo "vless://$UPSTREAM_UUID@UPSTREAM_SERVER_IP:13335?encryption=none&security=reality&sni=www.sberbank.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Upstream-Reality"
+echo "vless://$UPSTREAM_UUID@UPSTREAM_SERVER_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Upstream-Reality"
 echo ""
 
 echo "Ссылка для подключения к Bridge (вставьте BRIDGE_SERVER_IP):"
-echo "vless://$BRIDGE_UUID@BRIDGE_SERVER_IP:13335?encryption=none&security=reality&sni=yandex.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Yandex"
+echo "vless://$BRIDGE_UUID@BRIDGE_SERVER_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Yandex"
 echo ""
 
 

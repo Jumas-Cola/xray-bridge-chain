@@ -19,10 +19,10 @@
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
-                    "dest": "www.sberbank.ru:443",
+                    "dest": "vk.ru:443",
                     "serverNames": [
-                        "www.sberbank.ru",
-                        "online.sberbank.ru"
+                        "vk.ru",
+                        "m.vk.ru"
                     ],
                     "privateKey": "UPSTREAM-PRIVATE-KEY",
                     "shortIds": [
