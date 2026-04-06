@@ -8,10 +8,10 @@ UPSTREAM_UUID_F=$(mktemp)
 BRIDGE_KEYS_F=$(mktemp)
 UPSTREAM_KEYS_F=$(mktemp)
 
-docker run --rm teddysun/xray xray uuid    > "$BRIDGE_UUID_F"   2>&1 &
-docker run --rm teddysun/xray xray uuid    > "$UPSTREAM_UUID_F" 2>&1 &
-docker run --rm teddysun/xray xray x25519  > "$BRIDGE_KEYS_F"   2>&1 &
-docker run --rm teddysun/xray xray x25519  > "$UPSTREAM_KEYS_F" 2>&1 &
+docker run --rm teddysun/xray xray uuid    > "$BRIDGE_UUID_F"   &
+docker run --rm teddysun/xray xray uuid    > "$UPSTREAM_UUID_F" &
+docker run --rm teddysun/xray xray x25519  > "$BRIDGE_KEYS_F"   &
+docker run --rm teddysun/xray xray x25519  > "$UPSTREAM_KEYS_F" &
 wait
 
 BRIDGE_UUID=$(cat "$BRIDGE_UUID_F")
