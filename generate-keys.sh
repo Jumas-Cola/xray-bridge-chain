@@ -3,111 +3,21 @@
 read -rp "Bridge server IP: " BRIDGE_SERVER_IP
 read -rp "Upstream server IP: " UPSTREAM_SERVER_IP
 
-BRIDGE_UUID_F=$(mktemp)
-UPSTREAM_UUID_F=$(mktemp)
-BRIDGE_KEYS_F=$(mktemp)
-UPSTREAM_KEYS_F=$(mktemp)
+BRIDGE_UUID=$(docker run --rm teddysun/xray xray uuid)
+UPSTREAM_UUID=$(docker run --rm teddysun/xray xray uuid)
 
-docker run --rm teddysun/xray xray uuid    > "$BRIDGE_UUID_F"   &
-docker run --rm teddysun/xray xray uuid    > "$UPSTREAM_UUID_F" &
-docker run --rm teddysun/xray xray x25519  > "$BRIDGE_KEYS_F"   &
-docker run --rm teddysun/xray xray x25519  > "$UPSTREAM_KEYS_F" &
-wait
+BRIDGE_KEYS=$(docker run --rm teddysun/xray xray x25519)
+BRIDGE_PRIVATE=$(echo "$BRIDGE_KEYS" | grep "Private key:" | awk '{print $3}')
+BRIDGE_PUBLIC=$(echo "$BRIDGE_KEYS" | grep "Public key:" | awk '{print $3}')
 
-BRIDGE_UUID=$(cat "$BRIDGE_UUID_F")
-UPSTREAM_UUID=$(cat "$UPSTREAM_UUID_F")
-BRIDGE_PUBLIC=$(grep "Public key:" "$BRIDGE_KEYS_F" | awk '{print $3}')
-UPSTREAM_PUBLIC=$(grep "Public key:" "$UPSTREAM_KEYS_F" | awk '{print $3}')
+UPSTREAM_KEYS=$(docker run --rm teddysun/xray xray x25519)
+UPSTREAM_PRIVATE=$(echo "$UPSTREAM_KEYS" | grep "Private key:" | awk '{print $3}')
+UPSTREAM_PUBLIC=$(echo "$UPSTREAM_KEYS" | grep "Public key:" | awk '{print $3}')
 
-rm -f "$BRIDGE_UUID_F" "$UPSTREAM_UUID_F" "$BRIDGE_KEYS_F" "$UPSTREAM_KEYS_F"
-
-generate_client_config() {
-    local server_ip="$1"
-    local uuid="$2"
-    local pubkey="$3"
-    local output_file="$4"
-
-    cat > "$output_file" <<EOF
-{
-    "log": {
-        "loglevel": "warning"
-    },
-    "dns": {
-        "servers": [
-            "1.1.1.1",
-            {
-                "address": "223.5.5.5",
-                "domains": [
-                    "geosite:category-ru"
-                ],
-                "skipFallback": true,
-                "tag": "domestic-dns"
-            }
-        ],
-        "tag": "dns-module"
-    },
-    "inbounds": [
-        {
-            "listen": "127.0.0.1",
-            "port": 10808,
-            "protocol": "socks",
-            "settings": {
-                "auth": "noauth",
-                "udp": true,
-                "userLevel": 8
-            },
-            "sniffing": {
-                "destOverride": [
-                    "http",
-                    "tls"
-                ],
-                "enabled": true,
-                "routeOnly": false
-            },
-            "tag": "socks"
-        },
-        {
-            "listen": "127.0.0.1",
-            "port": 10809,
-            "protocol": "http",
-            "settings": {
-                "userLevel": 8
-            },
-            "sniffing": {
-                "destOverride": [
-                    "http",
-                    "tls"
-                ],
-                "enabled": true,
-                "routeOnly": false
-            },
-            "tag": "http"
-        }
-    ],
+ROUTING_BLOCK=$(cat <<'ROUTING'
     "routing": {
-        "domainStrategy": "IPOnDemand",
+        "domainStrategy": "IPIfNonMatch",
         "rules": [
-            {
-                "type": "field",
-                "protocol": ["bittorrent"],
-                "outboundTag": "direct"
-            },
-            {
-                "type": "field",
-                "network": "udp",
-                "port": "443",
-                "outboundTag": "block"
-            },
-            {
-                "type": "field",
-                "ip": ["geoip:private"],
-                "outboundTag": "direct"
-            },
-            {
-                "type": "field",
-                "domain": ["geosite:private"],
-                "outboundTag": "direct"
-            },
             {
                 "type": "field",
                 "domain": [
@@ -120,21 +30,44 @@ generate_client_config() {
             },
             {
                 "type": "field",
-                "ip": ["geoip:ru"],
+                "ip": [
+                    "geoip:ru",
+                    "geoip:private"
+                ],
                 "outboundTag": "direct"
-            },
-            {
-                "type": "field",
-                "inboundTag": ["domestic-dns"],
-                "outboundTag": "direct"
-            },
-            {
-                "type": "field",
-                "inboundTag": ["dns-module"],
-                "outboundTag": "proxy"
             }
         ]
     },
+ROUTING
+)
+
+generate_client_config() {
+    local server_ip="$1"
+    local uuid="$2"
+    local pubkey="$3"
+    local output_file="$4"
+
+    cat > "$output_file" <<EOF
+{
+    "log": {
+        "loglevel": "warning"
+    },
+    "inbounds": [
+        {
+            "port": 10808,
+            "protocol": "socks",
+            "settings": {
+                "auth": "noauth",
+                "udp": true
+            }
+        },
+        {
+            "port": 10809,
+            "protocol": "http",
+            "settings": {}
+        }
+    ],
+$ROUTING_BLOCK
     "outbounds": [
         {
             "tag": "proxy",
@@ -147,8 +80,7 @@ generate_client_config() {
                         "users": [
                             {
                                 "id": "$uuid",
-                                "encryption": "none",
-                                "level": 8
+                                "encryption": "none"
                             }
                         ]
                     }
@@ -161,34 +93,21 @@ generate_client_config() {
                     "serverName": "vk.ru",
                     "fingerprint": "chrome",
                     "publicKey": "$pubkey",
-                    "shortId": "0123456789abcdef",
-                    "show": false
+                    "shortId": "0123456789abcdef"
                 },
                 "xhttpSettings": {
                     "path": "/api/v1/data",
-                    "mode": "auto"
+                    "mode": "auto",
+                    "extra": {
+                        "xPaddingBytes": "100-1000"
+                    }
                 }
-            },
-            "mux": {
-                "enabled": false,
-                "concurrency": -1
             }
         },
         {
             "tag": "direct",
             "protocol": "freedom",
-            "settings": {
-                "domainStrategy": "UseIP"
-            }
-        },
-        {
-            "tag": "block",
-            "protocol": "blackhole",
-            "settings": {
-                "response": {
-                    "type": "http"
-                }
-            }
+            "settings": {}
         }
     ]
 }
