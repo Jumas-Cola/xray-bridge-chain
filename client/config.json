@@ -1,0 +1,124 @@
+{
+    "log": {
+        "loglevel": "warning"
+    },
+    "dns": {
+        "servers": [
+            {
+                "address": "https://1.1.1.1/dns-query",
+                "domains": [
+                    "geosite:geolocation-!cn"
+                ],
+                "skipFallback": true
+            },
+            {
+                "address": "https://77.88.8.8/dns-query",
+                "domains": [
+                    "domain:ru",
+                    "domain:su",
+                    "domain:xn--p1ai",
+                    "geosite:category-ru"
+                ],
+                "skipFallback": true
+            },
+            "https://1.1.1.1/dns-query"
+        ]
+    },
+    "inbounds": [
+        {
+            "port": 10808,
+            "protocol": "socks",
+            "settings": {
+                "udp": true
+            },
+            "tag": "socks-in"
+        },
+        {
+            "port": 10809,
+            "protocol": "http",
+            "settings": {},
+            "tag": "http-in"
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "BRIDGE-SERVER-IP",
+                        "port": 13335,
+                        "users": [
+                            {
+                                "id": "BRIDGE-UUID",
+                                "encryption": "none"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "reality",
+                "realitySettings": {
+                    "serverName": "vk.ru",
+                    "fingerprint": "chrome",
+                    "publicKey": "BRIDGE-PUBLIC-KEY",
+                    "shortId": "BRIDGE-SHORT-ID"
+                },
+                "xhttpSettings": {
+                    "path": "/api/v1/data",
+                    "mode": "auto",
+                    "extra": {
+                        "xPaddingBytes": "100-1000"
+                    }
+                }
+            },
+            "tag": "proxy"
+        },
+        {
+            "protocol": "freedom",
+            "settings": {},
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {},
+            "tag": "blocked"
+        }
+    ],
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "type": "field",
+                "domain": [
+                    "domain:ru",
+                    "domain:su",
+                    "domain:xn--p1ai",
+                    "geosite:category-ru"
+                ],
+                "outboundTag": "direct"
+            },
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:ru"
+                ],
+                "outboundTag": "direct"
+            },
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:private"
+                ],
+                "outboundTag": "direct"
+            },
+            {
+                "type": "field",
+                "port": "0-65535",
+                "outboundTag": "proxy"
+            }
+        ]
+    }
+}

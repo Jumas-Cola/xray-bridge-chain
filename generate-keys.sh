@@ -5,6 +5,10 @@ echo "Генерация ключей для Xray Reality"
 echo "==================================="
 echo ""
 
+read -p "Введите IP адрес Bridge сервера: " BRIDGE_IP
+read -p "Введите IP адрес Upstream сервера: " UPSTREAM_IP
+echo ""
+
 echo "1. UUID для Bridge клиента:"
 BRIDGE_UUID=$(docker run --rm teddysun/xray xray uuid)
 echo "$BRIDGE_UUID"
@@ -29,25 +33,39 @@ UPSTREAM_PUBLIC=$(echo "$UPSTREAM_KEYS" | grep "Public key:" | awk '{print $3}')
 echo "$UPSTREAM_KEYS"
 echo ""
 
-echo "5. Short ID для Bridge (используйте пустую строку \"\" или этот):"
-openssl rand -hex 8
+echo "5. Short ID для Bridge:"
+BRIDGE_SHORT_ID=$(openssl rand -hex 8)
+echo "$BRIDGE_SHORT_ID"
 echo ""
 
 echo "6. Short ID для Upstream:"
-openssl rand -hex 8
+UPSTREAM_SHORT_ID=$(openssl rand -hex 8)
+echo "$UPSTREAM_SHORT_ID"
 echo ""
 
 
-echo "Ссылка для подключения к Upstream (вставьте UPSTREAM_SERVER_IP):"
-echo "vless://$UPSTREAM_UUID@UPSTREAM_SERVER_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Upstream-Reality"
+echo "Клиентский конфиг для подключения к Bridge:"
 echo ""
-
-echo "Ссылка для подключения к Bridge (вставьте BRIDGE_SERVER_IP):"
-echo "vless://$BRIDGE_UUID@BRIDGE_SERVER_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Yandex"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+sed -e "s|BRIDGE-UUID|$BRIDGE_UUID|g" \
+    -e "s|BRIDGE-PUBLIC-KEY|$BRIDGE_PUBLIC|g" \
+    -e "s|BRIDGE-SERVER-IP|$BRIDGE_IP|g" \
+    -e "s|BRIDGE-SHORT-ID|$BRIDGE_SHORT_ID|g" \
+    "$SCRIPT_DIR/client/config.json"
 echo ""
-
-
 
 echo "==================================="
-echo "Сохраните эти значения!"
+echo "Значения для подстановки в конфиги серверов:"
+echo "==================================="
+echo ""
+echo "bridge/config.json:"
+echo "  BRIDGE-UUID:        $BRIDGE_UUID"
+echo "  BRIDGE-PRIVATE-KEY: $BRIDGE_PRIVATE"
+echo "  UPSTREAM-SERVER-IP: $UPSTREAM_IP"
+echo "  UPSTREAM-UUID:      $UPSTREAM_UUID"
+echo "  UPSTREAM-PASSWORD:  $UPSTREAM_PUBLIC"
+echo ""
+echo "upstream/config.json:"
+echo "  UPSTREAM-UUID:        $UPSTREAM_UUID"
+echo "  UPSTREAM-PRIVATE-KEY: $UPSTREAM_PRIVATE"
 echo "==================================="
