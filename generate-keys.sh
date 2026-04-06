@@ -44,29 +44,19 @@ echo "$UPSTREAM_SHORT_ID"
 echo ""
 
 
-BRIDGE_VLESS="vless://$BRIDGE_UUID@$BRIDGE_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=$BRIDGE_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Reality"
-UPSTREAM_VLESS="vless://$UPSTREAM_UUID@$UPSTREAM_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=$UPSTREAM_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Upstream-Reality"
+VLESS_LINK="vless://$BRIDGE_UUID@$BRIDGE_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=$BRIDGE_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Reality"
 
-echo "Ссылка для подключения к Bridge:"
-echo "$BRIDGE_VLESS"
-echo ""
-echo "Ссылка для подключения к Upstream:"
-echo "$UPSTREAM_VLESS"
+echo "Ссылка для подключения:"
+echo "$VLESS_LINK"
 echo ""
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SUB_DIR="$SCRIPT_DIR/bridge/subscription"
+mkdir -p "$SUB_DIR"
+echo "$VLESS_LINK" | base64 -w 0 > "$SUB_DIR/index.html"
 
-BRIDGE_SUB_DIR="$SCRIPT_DIR/bridge/subscription"
-mkdir -p "$BRIDGE_SUB_DIR"
-echo "$BRIDGE_VLESS" | base64 -w 0 > "$BRIDGE_SUB_DIR/index.html"
-
-UPSTREAM_SUB_DIR="$SCRIPT_DIR/upstream/subscription"
-mkdir -p "$UPSTREAM_SUB_DIR"
-echo "$UPSTREAM_VLESS" | base64 -w 0 > "$UPSTREAM_SUB_DIR/index.html"
-
-echo "Subscription URLs:"
-echo "  Bridge:   http://$BRIDGE_IP:8080/sub"
-echo "  Upstream: http://$UPSTREAM_IP:8080/sub"
+echo "Subscription URL:"
+echo "http://$BRIDGE_IP:8080/sub"
 echo ""
 
 echo "==================================="
