@@ -5,6 +5,12 @@ echo "Генерация ключей для Xray Reality"
 echo "==================================="
 echo ""
 
+read -p "Введите IP адрес Bridge сервера: " BRIDGE_IP
+read -p "Введите IP адрес Upstream сервера: " UPSTREAM_IP
+echo ""
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 echo "1. UUID для Bridge клиента:"
 BRIDGE_UUID=$(docker run --rm teddysun/xray xray uuid)
 echo "$BRIDGE_UUID"
@@ -29,25 +35,52 @@ UPSTREAM_PUBLIC=$(echo "$UPSTREAM_KEYS" | grep "Public key:" | awk '{print $3}')
 echo "$UPSTREAM_KEYS"
 echo ""
 
-echo "5. Short ID для Bridge (используйте пустую строку \"\" или этот):"
-openssl rand -hex 8
+echo "5. Short ID для Bridge:"
+BRIDGE_SHORT_ID=$(openssl rand -hex 8)
+echo "$BRIDGE_SHORT_ID"
 echo ""
 
 echo "6. Short ID для Upstream:"
-openssl rand -hex 8
+UPSTREAM_SHORT_ID=$(openssl rand -hex 8)
+echo "$UPSTREAM_SHORT_ID"
 echo ""
-
-
-echo "Ссылка для подключения к Upstream (вставьте UPSTREAM_SERVER_IP):"
-echo "vless://$UPSTREAM_UUID@UPSTREAM_SERVER_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Upstream-Reality"
-echo ""
-
-echo "Ссылка для подключения к Bridge (вставьте BRIDGE_SERVER_IP):"
-echo "vless://$BRIDGE_UUID@BRIDGE_SERVER_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=0123456789abcdef&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Yandex"
-echo ""
-
-
 
 echo "==================================="
-echo "Сохраните эти значения!"
+echo "Подстановка значений в конфиги..."
+echo "==================================="
+echo ""
+
+sed -i \
+    -e "s|BRIDGE-UUID|$BRIDGE_UUID|g" \
+    -e "s|BRIDGE-PRIVATE-KEY|$BRIDGE_PRIVATE|g" \
+    -e "s|UPSTREAM-SERVER-IP|$UPSTREAM_IP|g" \
+    -e "s|UPSTREAM-UUID|$UPSTREAM_UUID|g" \
+    -e "s|UPSTREAM-PASSWORD|$UPSTREAM_PUBLIC|g" \
+    -e "s|0123456789abcdef|$BRIDGE_SHORT_ID|g" \
+    "$SCRIPT_DIR/bridge/config.json"
+echo "bridge/config.json - готово"
+
+sed -i \
+    -e "s|UPSTREAM-UUID|$UPSTREAM_UUID|g" \
+    -e "s|UPSTREAM-PRIVATE-KEY|$UPSTREAM_PRIVATE|g" \
+    -e "s|0123456789abcdef|$UPSTREAM_SHORT_ID|g" \
+    "$SCRIPT_DIR/upstream/config.json"
+echo "upstream/config.json - готово"
+
+echo ""
+echo "==================================="
+echo "Ссылки для подключения:"
+echo "==================================="
+echo ""
+
+echo "Bridge:"
+echo "vless://$BRIDGE_UUID@$BRIDGE_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=$BRIDGE_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Reality"
+echo ""
+
+echo "Upstream:"
+echo "vless://$UPSTREAM_UUID@$UPSTREAM_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=$UPSTREAM_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Upstream-Reality"
+echo ""
+
+echo "==================================="
+echo "Готово! Конфиги обновлены, можно запускать docker compose up -d"
 echo "==================================="
