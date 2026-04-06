@@ -12,7 +12,7 @@ services:
 
   subscription:
     image: nginx:alpine
-    container_name: xray-subscription
+    container_name: xray-subscription-bridge
     restart: always
     ports:
       - "8080:80"
