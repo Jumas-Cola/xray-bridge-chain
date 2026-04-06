@@ -44,14 +44,19 @@ echo "$UPSTREAM_SHORT_ID"
 echo ""
 
 
-echo "Клиентский конфиг для подключения к Bridge:"
+VLESS_LINK="vless://$BRIDGE_UUID@$BRIDGE_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=$BRIDGE_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Reality"
+
+echo "Ссылка для подключения:"
+echo "$VLESS_LINK"
 echo ""
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-sed -e "s|BRIDGE-UUID|$BRIDGE_UUID|g" \
-    -e "s|BRIDGE-PUBLIC-KEY|$BRIDGE_PUBLIC|g" \
-    -e "s|BRIDGE-SERVER-IP|$BRIDGE_IP|g" \
-    -e "s|BRIDGE-SHORT-ID|$BRIDGE_SHORT_ID|g" \
-    "$SCRIPT_DIR/client/config.json"
+SUB_DIR="$SCRIPT_DIR/bridge/subscription"
+mkdir -p "$SUB_DIR"
+echo "$VLESS_LINK" | base64 -w 0 > "$SUB_DIR/index.html"
+
+echo "Subscription URL:"
+echo "http://$BRIDGE_IP:8080/sub"
 echo ""
 
 echo "==================================="
