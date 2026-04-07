@@ -42,8 +42,27 @@
     ],
     "outbounds": [
         {
+            "protocol": "wireguard",
+            "settings": {
+                "secretKey": "WARP-PRIVATE-KEY",
+                "address": [
+                    "172.16.0.2/32",
+                    "WARP-IPV6-ADDRESS/128"
+                ],
+                "peers": [
+                    {
+                        "publicKey": "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=",
+                        "endpoint": "engage.cloudflareclient.com:2408"
+                    }
+                ],
+                "reserved": [0, 0, 0]
+            },
+            "tag": "warp"
+        },
+        {
             "protocol": "freedom",
-            "settings": {}
+            "settings": {},
+            "tag": "direct"
         },
         {
             "protocol": "blackhole",
