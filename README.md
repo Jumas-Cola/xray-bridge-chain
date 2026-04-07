@@ -43,25 +43,21 @@ graph TD;
 На upstream-сервере выполните:
 
 ```bash
-# Скачать wgcf
-wget -O wgcf https://github.com/ViRb3/wgcf/releases/download/v2.2.3/wgcf_2.2.3_linux_amd64
-chmod +x wgcf
+# Скачать warp-reg
+wget -O warp-reg https://github.com/badafans/warp-reg/releases/download/v1.0/main-linux-amd64
+chmod +x warp-reg
 
-# Зарегистрировать аккаунт WARP
-./wgcf register
-
-# Сгенерировать профиль WireGuard
-./wgcf generate
+# Зарегистрировать аккаунт и получить ключи
+./warp-reg
 ```
 
-Из сгенерированного файла `wgcf-profile.conf` скопируйте значения:
+Из вывода скопируйте значения в `upstream/config.json`:
 
-| Поле в wgcf-profile.conf | Куда вставить в upstream/config.json |
+| Поле в выводе warp-reg | Куда вставить в upstream/config.json |
 |---|---|
-| `PrivateKey` | `WARP-PRIVATE-KEY` |
-| `Address` (IPv6) | `WARP-IPV6-ADDRESS` |
-
-> **Примечание:** Поле `reserved` оставьте `[0, 0, 0]` для стандартной регистрации. Если используете WARP+ или warp-reg, подставьте значения из вывода утилиты.
+| `private_key` | `WARP-PRIVATE-KEY` (поле `secretKey`) |
+| `v6` | `WARP-IPV6-ADDRESS` (поле `address`, IPv6-адрес) |
+| `reserved_dec` | `reserved` (массив из 3 чисел, например `[72, 114, 203]`) |
 
 ## Рекомендуемые домены для маскировки
 
