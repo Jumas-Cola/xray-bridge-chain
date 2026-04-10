@@ -27,7 +27,7 @@
                     "privateKey": "UPSTREAM-PRIVATE-KEY",
                     "shortIds": [
                         "",
-                        "0123456789abcdef"
+                        "UPSTREAM-SHORT-ID"
                     ]
                 },
                 "xhttpSettings": {

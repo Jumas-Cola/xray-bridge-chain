@@ -53,17 +53,18 @@ echo ""
 sed -i \
     -e "s|BRIDGE-UUID|$BRIDGE_UUID|g" \
     -e "s|BRIDGE-PRIVATE-KEY|$BRIDGE_PRIVATE|g" \
+    -e "s|BRIDGE-SHORT-ID|$BRIDGE_SHORT_ID|g" \
     -e "s|UPSTREAM-SERVER-IP|$UPSTREAM_IP|g" \
     -e "s|UPSTREAM-UUID|$UPSTREAM_UUID|g" \
     -e "s|UPSTREAM-PASSWORD|$UPSTREAM_PUBLIC|g" \
-    -e "s|0123456789abcdef|$BRIDGE_SHORT_ID|g" \
+    -e "s|UPSTREAM-SHORT-ID|$UPSTREAM_SHORT_ID|g" \
     "$SCRIPT_DIR/bridge/config.json"
 echo "bridge/config.json - готово"
 
 sed -i \
     -e "s|UPSTREAM-UUID|$UPSTREAM_UUID|g" \
     -e "s|UPSTREAM-PRIVATE-KEY|$UPSTREAM_PRIVATE|g" \
-    -e "s|0123456789abcdef|$UPSTREAM_SHORT_ID|g" \
+    -e "s|UPSTREAM-SHORT-ID|$UPSTREAM_SHORT_ID|g" \
     "$SCRIPT_DIR/upstream/config.json"
 echo "upstream/config.json - готово"
 

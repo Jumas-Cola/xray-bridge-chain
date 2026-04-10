@@ -26,7 +26,7 @@
                     "privateKey": "BRIDGE-PRIVATE-KEY",
                     "shortIds": [
                         "",
-                        "0123456789abcdef"
+                        "BRIDGE-SHORT-ID"
                     ]
                 },
                 "xhttpSettings": {
@@ -63,7 +63,7 @@
                     "serverName": "vk.ru",
                     "fingerprint": "chrome",
                     "publicKey": "UPSTREAM-PASSWORD",
-                    "shortId": "0123456789abcdef"
+                    "shortId": "UPSTREAM-SHORT-ID"
                 },
                 "xhttpSettings": {
                     "path": "/api/v1/data",
