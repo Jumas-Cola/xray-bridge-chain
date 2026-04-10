@@ -20,11 +20,10 @@ graph TD;
 
 ## Запуск
 
-1. Запустить скрипт `generate-keys.sh` и сохранить сгенерированные значения и ссылки для подключения.
-2. Зарегистрировать Cloudflare WARP и получить WireGuard-ключи (см. [Настройка WARP](#настройка-cloudflare-warp)).
-3. Вставить сохранённые значения в соответствующие места в конфигах.
-4. Зайти на bridge и upstream серверы и запустить сервисы `docker compose up -d`.
-5. Подключиться по сгенерированным на шаге 1 ссылкам.
+1. Запустить скрипт `generate-keys.sh` — он сгенерирует ключи, подставит их в конфиги и выведет ссылки для подключения.
+2. Зарегистрировать Cloudflare WARP и **вручную** подставить WireGuard-ключи в `upstream/config.json` (см. [Настройка WARP](#настройка-cloudflare-warp)).
+3. Зайти на bridge и upstream серверы и запустить сервисы `docker compose up -d`.
+4. Подключиться по сгенерированным на шаге 1 ссылкам.
 
 ## Настройка Cloudflare WARP
 
@@ -63,16 +62,12 @@ chmod +x warp-reg
 
 ### Для Bridge сервера (dest + serverNames):
 
-- vk.ru - ВКонтакте
-- www.vk.com - ВКонтакте
-- m.vk.ru - ВКонтакте мобильный
-- mail.ru - Mail.ru
-- www.tinkoff.ru - Тинькофф
-- www.ozon.ru - Озон
-- www.wildberries.ru - Wildberries
+- ya.ru - Яндекс (в соответствии с адресом VDS)
 
 ### Для Upstream сервера:
 
+- vk.ru - ВКонтакте
+- www.vk.com - ВКонтакте
 - gosuslugi.ru - Госуслуги
 - www.mos.ru - Мос.ру
 - www.nalog.gov.ru - ФНС
@@ -84,7 +79,7 @@ chmod +x warp-reg
 - Выбор домена для dest: Должен поддерживать TLS 1.3 и HTTP/2. Проверьте:
 
 ```bash
-curl -I --tlsv1.3 --http2 https://vk.ru
+curl -I --tlsv1.3 --http2 https://ya.ru
 ```
 
 - serverNames: Может содержать несколько доменов, клиент выбирает один случайно.

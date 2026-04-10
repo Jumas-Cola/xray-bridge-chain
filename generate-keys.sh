@@ -74,7 +74,7 @@ echo "==================================="
 echo ""
 
 echo "Bridge:"
-echo "vless://$BRIDGE_UUID@$BRIDGE_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=$BRIDGE_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Reality"
+echo "vless://$BRIDGE_UUID@$BRIDGE_IP:13335?encryption=none&security=reality&sni=ya.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=$BRIDGE_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Reality"
 echo ""
 
 echo "Upstream:"
