@@ -24,14 +24,14 @@ echo ""
 echo "3. Reality ключи для Bridge:"
 BRIDGE_KEYS=$(docker run --rm teddysun/xray xray x25519)
 BRIDGE_PRIVATE=$(echo "$BRIDGE_KEYS" | grep "PrivateKey:" | awk '{print $2}')
-BRIDGE_PUBLIC=$(echo "$BRIDGE_KEYS" | grep "Password:" | awk '{print $2}')
+BRIDGE_PUBLIC=$(echo "$BRIDGE_KEYS" | grep "Password" | awk -F': ' '{print $2}')
 echo "$BRIDGE_KEYS"
 echo ""
 
 echo "4. Reality ключи для Upstream:"
 UPSTREAM_KEYS=$(docker run --rm teddysun/xray xray x25519)
 UPSTREAM_PRIVATE=$(echo "$UPSTREAM_KEYS" | grep "PrivateKey:" | awk '{print $2}')
-UPSTREAM_PUBLIC=$(echo "$UPSTREAM_KEYS" | grep "Password:" | awk '{print $2}')
+UPSTREAM_PUBLIC=$(echo "$UPSTREAM_KEYS" | grep "Password" | awk -F': ' '{print $2}')
 echo "$UPSTREAM_KEYS"
 echo ""
 
