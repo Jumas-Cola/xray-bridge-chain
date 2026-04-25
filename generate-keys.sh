@@ -75,11 +75,11 @@ echo "==================================="
 echo ""
 
 echo "Bridge:"
-echo "vless://$BRIDGE_UUID@$BRIDGE_IP:13335?encryption=none&security=reality&sni=ya.ru&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=$BRIDGE_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Bridge-Reality"
+echo "vless://$BRIDGE_UUID@$BRIDGE_IP:13335?encryption=none&security=reality&sni=google.com&fp=chrome&pbk=$BRIDGE_PUBLIC&sid=$BRIDGE_SHORT_ID&type=xhttp&path=%2Fcdn%2Fassets%2Fmain.min.js#Bridge-Reality"
 echo ""
 
 echo "Upstream:"
-echo "vless://$UPSTREAM_UUID@$UPSTREAM_IP:13335?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=$UPSTREAM_SHORT_ID&type=xhttp&path=%2Fapi%2Fv1%2Fdata#Upstream-Reality"
+echo "vless://$UPSTREAM_UUID@$UPSTREAM_IP:13335?encryption=none&security=reality&sni=microsoft.com&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=$UPSTREAM_SHORT_ID&type=xhttp&path=%2Fcdn%2Fassets%2Fmain.min.js#Upstream-Reality"
 echo ""
 
 echo "==================================="

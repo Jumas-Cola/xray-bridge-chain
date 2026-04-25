@@ -19,7 +19,7 @@
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
-                    "dest": "www.apple.com:443",
+                    "target": "www.apple.com:443",
                     "serverNames": [
                         "ya.ru",
                         "vk.ru",

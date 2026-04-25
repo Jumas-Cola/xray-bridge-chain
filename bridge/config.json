@@ -19,7 +19,7 @@
         "security": "reality",
         "realitySettings": {
           "show": false,
-          "dest": "ya.ru:443",
+          "target": "ya.ru:443",
           "serverNames": [
             "ya.ru",
             "vk.ru",
