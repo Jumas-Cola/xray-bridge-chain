@@ -19,7 +19,7 @@
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
-                    "dest": "www.google.com:443",
+                    "target": "www.google.com:443",
                     "serverNames": [
                         "google.com",
                         "www.google.com",
