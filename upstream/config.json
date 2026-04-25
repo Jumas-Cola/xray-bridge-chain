@@ -26,7 +26,8 @@
                         "gemini.google.com",
                         "earth.google.com",
                         "cloud.google.com",
-                        "docs.google.com"
+                        "docs.google.com",
+                        "tagmanager.google.com"
                     ],
                     "privateKey": "UPSTREAM-PRIVATE-KEY",
                     "shortIds": [

@@ -81,7 +81,7 @@ echo "vless://$BRIDGE_UUID@$BRIDGE_IP:$BRIDGE_PORT?encryption=none&security=real
 echo ""
 
 echo "Upstream:"
-echo "vless://$UPSTREAM_UUID@$UPSTREAM_IP:$UPSTREAM_PORT?encryption=none&security=reality&sni=vk.ru&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=$UPSTREAM_SHORT_ID&type=xhttp&path=%2Fcdn%2Fassets%2Fmain.min.js#Upstream-Reality"
+echo "vless://$UPSTREAM_UUID@$UPSTREAM_IP:$UPSTREAM_PORT?encryption=none&security=reality&sni=www.google.com&fp=chrome&pbk=$UPSTREAM_PUBLIC&sid=$UPSTREAM_SHORT_ID&type=xhttp&path=%2Fcdn%2Fassets%2Fmain.min.js#Upstream-Reality"
 echo ""
 
 echo "==================================="
