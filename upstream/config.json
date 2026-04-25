@@ -19,12 +19,14 @@
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
-                    "dest": "www.apple.com:443",
+                    "dest": "www.google.com:443",
                     "serverNames": [
-                        "apple.com",
-                        "www.apple.com",
-                        "support.apple.com",
-                        "discussions.apple.com"
+                        "google.com",
+                        "www.google.com",
+                        "gemini.google.com",
+                        "earth.google.com",
+                        "cloud.google.com",
+                        "docs.google.com"
                     ],
                     "privateKey": "UPSTREAM-PRIVATE-KEY",
                     "shortIds": [
