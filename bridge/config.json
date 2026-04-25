@@ -4,7 +4,7 @@
     },
     "inbounds": [
         {
-            "port": 13335,
+            "port": 443,
             "protocol": "vless",
             "settings": {
                 "clients": [
@@ -30,10 +30,10 @@
                     ]
                 },
                 "xhttpSettings": {
-                    "path": "/api/v1/data",
+                    "path": "/cdn/assets/main.min.js",
                     "mode": "auto",
                     "extra": {
-                        "xPaddingBytes": "100-1000"
+                        "xPaddingBytes": "500-2000"
                     }
                 }
             }
@@ -46,7 +46,7 @@
                 "vnext": [
                     {
                         "address": "UPSTREAM-SERVER-IP",
-                        "port": 13335,
+                        "port": 443,
                         "users": [
                             {
                                 "id": "UPSTREAM-UUID",
@@ -66,10 +66,10 @@
                     "shortId": "UPSTREAM-SHORT-ID"
                 },
                 "xhttpSettings": {
-                    "path": "/api/v1/data",
+                    "path": "/cdn/assets/main.min.js",
                     "mode": "auto",
                     "extra": {
-                        "xPaddingBytes": "100-1000"
+                        "xPaddingBytes": "500-2000"
                     }
                 }
             }
