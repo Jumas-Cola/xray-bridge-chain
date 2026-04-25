@@ -19,10 +19,16 @@
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
-                    "dest": "vk.ru:443",
+                    "target": "www.apple.com:443",
                     "serverNames": [
+                        "ya.ru",
                         "vk.ru",
-                        "m.vk.ru"
+                        "m.vk.ru",
+                        "rutube.ru",
+                        "ok.ru",
+                        "market.yandex.ru",
+                        "google.com",
+                        "microsoft.com"
                     ],
                     "privateKey": "UPSTREAM-PRIVATE-KEY",
                     "shortIds": [
@@ -31,10 +37,10 @@
                     ]
                 },
                 "xhttpSettings": {
-                    "path": "/api/v1/data",
+                    "path": "/cdn/assets/main.min.js",
                     "mode": "auto",
                     "extra": {
-                        "xPaddingBytes": "100-1000"
+                        "xPaddingBytes": "500-2000"
                     }
                 }
             }

@@ -1,78 +1,85 @@
 {
-    "log": {
-        "loglevel": "warning"
-    },
-    "inbounds": [
-        {
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "port": 13335,
+      "protocol": "vless",
+      "settings": {
+        "clients": [
+          {
+            "id": "BRIDGE-UUID"
+          }
+        ],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "realitySettings": {
+          "show": false,
+          "target": "ya.ru:443",
+          "serverNames": [
+            "ya.ru",
+            "vk.ru",
+            "m.vk.ru",
+            "rutube.ru",
+            "ok.ru",
+            "market.yandex.ru",
+            "google.com",
+            "microsoft.com"
+          ],
+          "privateKey": "BRIDGE-PRIVATE-KEY",
+          "shortIds": [
+            "",
+            "BRIDGE-SHORT-ID"
+          ]
+        },
+        "xhttpSettings": {
+          "path": "/cdn/assets/main.min.js",
+          "mode": "auto",
+          "extra": {
+            "xPaddingBytes": "500-2000"
+          }
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "UPSTREAM-SERVER-IP",
             "port": 13335,
-            "protocol": "vless",
-            "settings": {
-                "clients": [
-                    {
-                        "id": "BRIDGE-UUID"
-                    }
-                ],
-                "decryption": "none"
-            },
-            "streamSettings": {
-                "network": "xhttp",
-                "security": "reality",
-                "realitySettings": {
-                    "show": false,
-                    "dest": "ya.ru:443",
-                    "serverNames": [
-                        "ya.ru"
-                    ],
-                    "privateKey": "BRIDGE-PRIVATE-KEY",
-                    "shortIds": [
-                        "",
-                        "BRIDGE-SHORT-ID"
-                    ]
-                },
-                "xhttpSettings": {
-                    "path": "/api/v1/data",
-                    "mode": "auto",
-                    "extra": {
-                        "xPaddingBytes": "100-1000"
-                    }
-                }
-            }
+            "users": [
+              {
+                "id": "UPSTREAM-UUID",
+                "encryption": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "xhttp",
+        "security": "reality",
+        "realitySettings": {
+          "serverName": "vk.ru",
+          "fingerprint": "chrome",
+          "publicKey": "UPSTREAM-PASSWORD",
+          "shortId": "UPSTREAM-SHORT-ID"
+        },
+        "xhttpSettings": {
+          "path": "/cdn/assets/main.min.js",
+          "mode": "auto",
+          "extra": {
+            "xPaddingBytes": "500-2000"
+          }
         }
-    ],
-    "outbounds": [
-        {
-            "protocol": "vless",
-            "settings": {
-                "vnext": [
-                    {
-                        "address": "UPSTREAM-SERVER-IP",
-                        "port": 13335,
-                        "users": [
-                            {
-                                "id": "UPSTREAM-UUID",
-                                "encryption": "none"
-                            }
-                        ]
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "xhttp",
-                "security": "reality",
-                "realitySettings": {
-                    "serverName": "vk.ru",
-                    "fingerprint": "chrome",
-                    "publicKey": "UPSTREAM-PASSWORD",
-                    "shortId": "UPSTREAM-SHORT-ID"
-                },
-                "xhttpSettings": {
-                    "path": "/api/v1/data",
-                    "mode": "auto",
-                    "extra": {
-                        "xPaddingBytes": "100-1000"
-                    }
-                }
-            }
-        }
-    ]
+      }
+    }
+  ]
 }
