@@ -53,7 +53,7 @@
         "vnext": [
           {
             "address": "UPSTREAM-SERVER-IP",
-            "port": 443,
+            "port": 13335,
             "users": [
               {
                 "id": "UPSTREAM-UUID",
