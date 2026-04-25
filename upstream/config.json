@@ -4,7 +4,7 @@
     },
     "inbounds": [
         {
-            "port": 13335,
+            "port": 443,
             "protocol": "vless",
             "settings": {
                 "clients": [
