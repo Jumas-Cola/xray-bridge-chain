@@ -4,7 +4,7 @@ services:
     container_name: xray-bridge
     restart: always
     ports:
-      - "13335:13335/tcp"
+      - "${PORT}:${PORT}/tcp"
     volumes:
       - ./config.json:/etc/xray/config.json:ro
     networks:
