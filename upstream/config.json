@@ -19,10 +19,12 @@
                 "security": "reality",
                 "realitySettings": {
                     "show": false,
-                    "dest": "vk.ru:443",
+                    "dest": "www.apple.com:443",
                     "serverNames": [
-                        "vk.ru",
-                        "m.vk.ru"
+                        "apple.com",
+                        "www.apple.com",
+                        "support.apple.com",
+                        "discussions.apple.com"
                     ],
                     "privateKey": "UPSTREAM-PRIVATE-KEY",
                     "shortIds": [
