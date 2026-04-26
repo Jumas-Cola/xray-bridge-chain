@@ -39,7 +39,7 @@
                     "path": "/cdn/assets/main.min.js",
                     "mode": "auto",
                     "extra": {
-                        "xPaddingBytes": "500-2000"
+                        "xPaddingBytes": "100-1000"
                     }
                 }
             }
