@@ -1,0 +1,25 @@
+#!/bin/bash
+# Generate Xray keys and save to files
+
+# Generate UUID
+UUID=$(docker run --rm {{ xray_image }} xray uuid)
+
+# Generate Reality keypair
+KEYS=$(docker run --rm {{ xray_image }} xray x25519)
+PRIVATE_KEY=$(echo "$KEYS" | grep 'PrivateKey:' | awk '{print $2}')
+PUBLIC_KEY=$(echo "$KEYS" | grep 'Password' | awk -F': ' '{print $2}')
+
+# Generate Short ID
+SHORT_ID=$(openssl rand -hex 8)
+
+# Save to files
+echo "$UUID" > /tmp/xray_uuid.txt
+echo "$PRIVATE_KEY" > /tmp/xray_private.txt
+echo "$PUBLIC_KEY" > /tmp/xray_public.txt
+echo "$SHORT_ID" > /tmp/xray_sid.txt
+
+echo "Keys generated:"
+echo "UUID: $UUID"
+echo "Private: $PRIVATE_KEY"
+echo "Public: $PUBLIC_KEY"
+echo "SID: $SHORT_ID"

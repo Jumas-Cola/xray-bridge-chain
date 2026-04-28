@@ -1,0 +1,180 @@
+---
+- name: Deploy Xray Upstream Server
+  hosts: upstream
+  become: yes
+  vars:
+    config_dir: "/opt/xray-upstream"
+
+  tasks:
+    # Phase 1: Install Docker
+    - name: Install required packages
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+        update_cache: yes
+
+    - name: Create keyrings directory
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Add Docker GPG key
+      shell: |
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        chmod a+r /etc/apt/keyrings/docker.gpg
+      args:
+        creates: /etc/apt/keyrings/docker.gpg
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_facts.distribution_release }} stable"
+        state: present
+        filename: docker
+
+    - name: Install Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker service is running
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create config directory
+      file:
+        path: "{{ config_dir }}"
+        state: directory
+        mode: '0755'
+
+    # Phase 2: Generate keys
+    - name: Create key generation script
+      template:
+        src: templates/generate_xray_keys.sh.j2
+        dest: /tmp/generate_keys.sh
+        mode: '0755'
+
+    - name: Run key generation
+      shell: /tmp/generate_keys.sh
+      changed_when: false
+
+    - name: Read UUID
+      shell: cat /tmp/xray_uuid.txt
+      register: uuid_output
+      changed_when: false
+
+    - name: Set UUID
+      set_fact:
+        upstream_uuid: "{{ uuid_output.stdout | trim }}"
+
+    - name: Read Private Key
+      shell: cat /tmp/xray_private.txt
+      register: private_output
+      changed_when: false
+
+    - name: Set Private Key
+      set_fact:
+        upstream_private_key: "{{ private_output.stdout | trim }}"
+
+    - name: Read Public Key
+      shell: cat /tmp/xray_public.txt
+      register: public_output
+      changed_when: false
+
+    - name: Set Public Key
+      set_fact:
+        upstream_public_key: "{{ public_output.stdout | trim }}"
+
+    - name: Read Short ID
+      shell: cat /tmp/xray_sid.txt
+      register: sid_output
+      changed_when: false
+
+    - name: Set Short ID
+      set_fact:
+        upstream_short_id: "{{ sid_output.stdout | trim }}"
+
+    - name: Show generated keys
+      debug:
+        msg: "UUID: {{ upstream_uuid }}, Private: {{ upstream_private_key }}, Public: {{ upstream_public_key }}, SID: {{ upstream_short_id }}"
+
+
+
+    # Phase 4: Create config files
+    - name: Create docker-compose.yml
+      copy:
+        content: |
+          services:
+            xray-upstream:
+              image: {{ xray_image }}
+              container_name: xray-upstream
+              restart: always
+              ports:
+                - "${PORT}:${PORT}/tcp"
+              volumes:
+                - ./config.json:/etc/xray/config.json:ro
+              networks:
+                - xray_net
+          networks:
+            xray_net:
+              driver: bridge
+        dest: "{{ config_dir }}/docker-compose.yml"
+        mode: '0644'
+
+    - name: Create .env
+      copy:
+        content: "PORT={{ xray_inbound_port }}\n"
+        dest: "{{ config_dir }}/.env"
+        mode: '0644'
+
+    - name: Create config.json from template
+      template:
+        src: templates/upstream_config.json.j2
+        dest: "{{ config_dir }}/config.json"
+        mode: '0644'
+
+    # Phase 5: Start service
+    - name: Stop and remove old container
+      shell: docker compose down
+      args:
+        chdir: "{{ config_dir }}"
+      ignore_errors: yes
+
+    - name: Start service with force recreate
+      shell: docker compose up -d --force-recreate
+      args:
+        chdir: "{{ config_dir }}"
+
+    - name: Verify config.json on server
+      shell: grep privateKey {{ config_dir }}/config.json
+      register: config_check
+      changed_when: false
+
+    - name: Show config check
+      debug:
+        msg: "{{ config_check.stdout }}"
+
+    - name: Wait for service
+      pause:
+        seconds: 3
+
+    # Phase 6: Show connection info
+    - name: Show connection link
+      debug:
+        msg:
+          - "==================================="
+          - "vless://{{ upstream_uuid }}@{{ ansible_host }}:{{ xray_inbound_port }}?encryption=none&security=reality&sni=www.google.com&fp=chrome&pbk={{ upstream_public_key }}&sid={{ upstream_short_id }}&type=xhttp&path=%2Fcdn%2Fassets%2Fmain.min.js#Upstream-Reality"
+          - "==================================="
+          - "Private Key in config: {{ upstream_private_key }}"
+          - "Public Key in link: {{ upstream_public_key }}"
+          - "These should be a key pair!"

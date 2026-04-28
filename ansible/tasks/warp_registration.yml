@@ -1,0 +1,75 @@
+---
+# WARP registration tasks
+
+- name: Check if WARP is already registered
+  stat:
+    path: "{{ config_dir }}/warp_keys.json"
+  register: warp_keys_file
+
+- name: Download warp-reg binary
+  get_url:
+    url: https://github.com/badafans/warp-reg/releases/download/v1.0/main-linux-amd64
+    dest: /tmp/warp-reg
+    mode: '0755'
+  when: not warp_keys_file.stat.exists
+
+- name: Register WARP account
+  shell: /tmp/warp-reg
+  args:
+    chdir: /tmp
+  register: warp_reg_output
+  when: not warp_keys_file.stat.exists
+  failed_when: false
+
+- name: Debug WARP output
+  debug:
+    var: warp_reg_output.stdout_lines
+  when: not warp_keys_file.stat.exists
+
+- name: Parse WARP private key
+  set_fact:
+    warp_private_key: "{{ warp_reg_output.stdout | regex_search('private_key:\\s+(\\S+)') | regex_replace('private_key:\\s+', '') }}"
+  when: not warp_keys_file.stat.exists and warp_reg_output.rc == 0
+
+- name: Parse WARP IPv6
+  set_fact:
+    warp_ipv6: "{{ warp_reg_output.stdout | regex_search('v6:\\s+(\\S+)') | regex_replace('v6:\\s+', '') }}"
+  when: not warp_keys_file.stat.exists and warp_reg_output.rc == 0
+
+- name: Parse WARP reserved
+  set_fact:
+    warp_reserved: "{{ warp_reg_output.stdout_lines | select('search', 'reserved:') | first | regex_replace('^.*reserved:\\s+(\\[.*\\])\\s*$', '\\1') }}"
+  when: not warp_keys_file.stat.exists and warp_reg_output.rc == 0
+
+- name: Save WARP keys to file
+  copy:
+    content: |
+      {
+        "private_key": "{{ warp_private_key }}",
+        "ipv6": "{{ warp_ipv6 }}",
+        "reserved": {{ warp_reserved }}
+      }
+    dest: "{{ config_dir }}/warp_keys.json"
+    mode: '0600'
+  when: not warp_keys_file.stat.exists and warp_reg_output.rc == 0
+
+- name: Load existing WARP keys
+  slurp:
+    src: "{{ config_dir }}/warp_keys.json"
+  register: existing_warp_keys
+  when: warp_keys_file.stat.exists
+
+- name: Set WARP facts from existing keys
+  set_fact:
+    warp_private_key: "{{ (existing_warp_keys.content | b64decode | from_json).private_key }}"
+    warp_ipv6: "{{ (existing_warp_keys.content | b64decode | from_json).ipv6 }}"
+    warp_reserved: "{{ (existing_warp_keys.content | b64decode | from_json).reserved }}"
+  when: warp_keys_file.stat.exists
+
+- name: Display WARP configuration
+  debug:
+    msg:
+      - "WARP Private Key: {{ warp_private_key }}"
+      - "WARP IPv6: {{ warp_ipv6 }}"
+      - "WARP Reserved: {{ warp_reserved }}"
+  when: warp_private_key is defined

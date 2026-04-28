@@ -1,0 +1,15 @@
+services:
+  xray-upstream:
+    image: {{ xray_image }}
+    container_name: xray-upstream
+    restart: always
+    ports:
+      - "${PORT}:${PORT}/tcp"
+    volumes:
+      - ./config.json:/etc/xray/config.json:ro
+    networks:
+      - xray_net
+
+networks:
+  xray_net:
+    driver: bridge

@@ -1,0 +1,81 @@
+{
+    "log": {
+        "loglevel": "{{ xray_log_level }}"
+    },
+    "inbounds": [
+        {
+            "port": {{ xray_inbound_port }},
+            "protocol": "{{ xray_protocol }}",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "{{ bridge_uuid }}"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "reality",
+                "realitySettings": {
+                    "show": false,
+                    "target": "{{ reality_target }}",
+                    "serverNames": {{ reality_server_names | to_json }},
+                    "privateKey": "{{ bridge_private_key }}",
+                    "shortIds": [
+                        "",
+                        "{{ bridge_short_id }}"
+                    ]
+                },
+                "xhttpSettings": {
+                    "path": "{{ xhttp_path }}",
+                    "mode": "{{ xhttp_mode }}",
+                    "extra": {
+                        "xPaddingBytes": "{{ xhttp_padding_bytes }}"
+                    }
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "{{ upstream_host }}",
+                        "port": {{ upstream_port | default(443) }},
+                        "users": [
+                            {
+                                "id": "{{ upstream_uuid }}",
+                                "encryption": "none"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "reality",
+                "realitySettings": {
+                    "serverName": "{{ upstream_sni }}",
+                    "fingerprint": "{{ upstream_fp }}",
+                    "publicKey": "{{ upstream_public_key }}",
+                    "shortId": "{{ upstream_short_id }}"
+                },
+                "xhttpSettings": {
+                    "path": "{{ xhttp_path }}",
+                    "mode": "{{ xhttp_mode }}",
+                    "extra": {
+                        "xPaddingBytes": "{{ xhttp_padding_bytes }}"
+                    }
+                }
+            }
+        },
+        {
+            "protocol": "freedom",
+            "settings": {},
+            "tag": "direct"
+        }
+    ]
+}

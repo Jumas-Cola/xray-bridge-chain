@@ -1,0 +1,31 @@
+---
+# Bridge server variables
+service_name: "xray-bridge"
+config_dir: "/opt/xray-bridge"
+
+# Xray configuration
+xray_inbound_port: "{{ xray_port }}"
+xray_log_level: "warning"
+xray_protocol: "vless"
+
+# Reality settings for inbound (bridge accepts client connections)
+reality_target: "ya.ru:443"
+reality_server_names:
+  - "ya.ru"
+  - "yandex.ru"
+  - "dzen.ru"
+  - "yandex.cloud"
+
+# xhttp settings
+xhttp_path: "/cdn/assets/main.min.js"
+xhttp_mode: "auto"
+xhttp_padding_bytes: "100-1000"
+
+# Upstream connection settings (bridge connects to upstream)
+upstream_host: ""  # IP or hostname of upstream server
+upstream_port: 443
+upstream_uuid: ""  # UUID from upstream server
+upstream_public_key: ""  # Public key from upstream server
+upstream_short_id: ""  # Short ID from upstream server
+upstream_sni: "www.google.com"
+upstream_fp: "chrome"

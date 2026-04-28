@@ -1,0 +1,53 @@
+{
+    "log": {
+        "loglevel": "{{ xray_log_level }}"
+    },
+    "inbounds": [
+        {
+            "port": {{ xray_inbound_port }},
+            "protocol": "{{ xray_protocol }}",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "{{ upstream_uuid }}"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "reality",
+                "realitySettings": {
+                    "show": false,
+                    "target": "{{ reality_target }}",
+                    "serverNames": {{ reality_server_names | to_json }},
+                    "privateKey": "{{ upstream_private_key }}",
+                    "shortIds": [
+                        "",
+                        "{{ upstream_short_id }}"
+                    ]
+                },
+                "xhttpSettings": {
+                    "path": "{{ xhttp_path }}",
+                    "mode": "{{ xhttp_mode }}",
+                    "extra": {
+                        "xPaddingBytes": "{{ xhttp_padding_bytes }}"
+                    }
+                }
+            }
+        }
+    ],
+    "outbounds": [
+
+        {
+            "protocol": "freedom",
+            "settings": {},
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {},
+            "tag": "blocked"
+        }
+    ]
+}

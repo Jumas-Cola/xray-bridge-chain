@@ -20,10 +20,93 @@ graph TD;
 
 ## Запуск
 
+### Ручная настройка
+
 1. Запустить скрипт `generate-keys.sh` — он сгенерирует ключи, подставит их в конфиги и выведет ссылки для подключения.
 2. Зарегистрировать Cloudflare WARP и **вручную** подставить WireGuard-ключи в `upstream/config.json` (см. [Настройка WARP](#настройка-cloudflare-warp)).
 3. Зайти на bridge и upstream серверы и запустить сервисы `docker compose up -d`.
 4. Подключиться по сгенерированным на шаге 1 ссылкам.
+
+### Автоматическая настройка через Ansible
+
+Для автоматического развёртывания используется Ansible. Это устраняет необходимость ручной настройки серверов.
+
+**Требования:**
+- Установленный Ansible на локальной машине
+- Доступ к серверам по SSH (пароль или SSH-ключ)
+
+**Шаги настройки:**
+
+1. Настройте инвентарь в `ansible/inventory/hosts.yml`:
+```yaml
+all:
+  children:
+    upstream:
+      hosts:
+        upstream-server:
+          ansible_host: IP_ИЛИ_HOST_UPSTREAM
+          ansible_user: root
+    bridge:
+      hosts:
+        bridge-server:
+          ansible_host: IP_ИЛИ_HOST_BRIDGE
+          ansible_user: root
+```
+
+2. Запустите плейбук:
+```bash
+cd ansible
+./setup.sh
+```
+Или напрямую:
+```bash
+# Для upstream-сервера
+ansible-playbook -i inventory/hosts.yml upstream.yml
+
+# Для bridge-сервера
+ansible-playbook -i inventory/hosts.yml bridge.yml
+```
+
+Или используйте скрипт (запускает оба):
+```bash
+./setup.sh
+```
+
+3. В процессе выполнения будет запрошен SSH-пароль (если не настроены ключи).
+
+4. После завершения в выводе появятся ссылки для подключения клиентов.
+
+**Что делает плейбук автоматически:**
+- Устанавливает Docker и Docker Compose на серверы
+- Генерирует ключи Xray (UUID, пары ключей Reality, Short ID)
+- Регистрирует WARP (WireGuard) для upstream-сервера
+- Создаёт конфигурационные файлы из шаблонов
+- Запускает контейнеры с Xray
+
+**Переменные конфигурации:**
+
+Настройки находятся в `ansible/group_vars/`:
+- `all.yml` — общие настройки (образ Xray, порт)
+- `upstream.yml` — настройки upstream-сервера (цель Reality, SNI, пути xhttp)
+- `bridge.yml` — настройки bridge-сервера
+
+**Важно: настройка bridge после upstream**
+
+Bridge-сервер подключается к upstream, поэтому требует данных сгенерированных на upstream:
+
+1. Сначала запустите upstream: `ansible-playbook -i inventory/hosts.yml upstream.yml`
+2. В выводе найдите данные:
+   - `UUID` (для upstream_uuid)
+   - `Public Key` (для upstream_public_key)
+   - `SID` (для upstream_short_id)
+3. Заполните `ansible/group_vars/bridge.yml`:
+```yaml
+upstream_host: "IP_АДРЕС_UPSTREAM"
+upstream_uuid: "df8480e6-..."  # UUID из вывода upstream
+upstream_public_key: "QVUJdJ..."  # Public Key из вывода upstream
+upstream_short_id: "d281889344e3f9e3"  # SID из вывода upstream
+```
+4. Запустите bridge: `ansible-playbook -i inventory/hosts.yml bridge.yml`
 
 ## Настройка Cloudflare WARP
 

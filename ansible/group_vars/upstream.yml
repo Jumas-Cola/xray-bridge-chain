@@ -1,0 +1,30 @@
+---
+# Upstream server variables
+service_name: "xray-upstream"
+config_dir: "/opt/xray-upstream"
+
+# Xray configuration
+xray_inbound_port: "{{ xray_port }}"
+xray_log_level: "warning"
+xray_protocol: "vless"
+
+# Reality settings
+reality_target: "www.google.com:443"
+reality_server_names:
+  - "google.com"
+  - "www.google.com"
+  - "gemini.google.com"
+  - "earth.google.com"
+  - "cloud.google.com"
+  - "docs.google.com"
+  - "tagmanager.google.com"
+
+# xhttp settings
+xhttp_path: "/cdn/assets/main.min.js"
+xhttp_mode: "auto"
+xhttp_padding_bytes: "100-1000"
+
+# Outbound settings
+use_warp: true
+warp_endpoint: "162.159.193.6:2408"
+warp_public_key: "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo="

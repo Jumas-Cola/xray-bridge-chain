@@ -1,0 +1,51 @@
+---
+# Generate Xray keys and save them as facts
+
+- name: Generate UUID for Upstream
+  shell: docker run --rm {{ xray_image }} xray uuid
+  register: upstream_uuid_output
+  changed_when: false
+
+- name: Set UUID fact
+  set_fact:
+    upstream_uuid: "{{ upstream_uuid_output.stdout | trim }}"
+
+- name: Generate Reality keypair for Upstream
+  shell: docker run --rm {{ xray_image }} xray x25519
+  register: upstream_keys_output
+  changed_when: false
+
+- name: Parse Private Key
+  shell: echo "{{ upstream_keys_output.stdout }}" | grep 'PrivateKey:' | awk '{print $2}'
+  register: private_key_output
+  changed_when: false
+
+- name: Set Private Key fact
+  set_fact:
+    upstream_private_key: "{{ private_key_output.stdout | trim }}"
+
+- name: Parse Public Key
+  shell: echo "{{ upstream_keys_output.stdout }}" | grep 'PublicKey' | awk '{print $2}'
+  register: public_key_output
+  changed_when: false
+
+- name: Set Public Key fact
+  set_fact:
+    upstream_public_key: "{{ public_key_output.stdout | trim }}"
+
+- name: Generate Short ID for Upstream
+  shell: openssl rand -hex 8
+  register: upstream_short_id_output
+  changed_when: false
+
+- name: Set Short ID fact
+  set_fact:
+    upstream_short_id: "{{ upstream_short_id_output.stdout | trim }}"
+
+- name: Display generated keys
+  debug:
+    msg:
+      - "Upstream UUID: {{ upstream_uuid }}"
+      - "Upstream Private Key: {{ upstream_private_key }}"
+      - "Upstream Public Key: {{ upstream_public_key }}"
+      - "Upstream Short ID: {{ upstream_short_id }}"
