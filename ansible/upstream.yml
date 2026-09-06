@@ -173,7 +173,7 @@
       debug:
         msg:
           - "==================================="
-          - "vless://{{ upstream_uuid }}@{{ ansible_host }}:{{ xray_inbound_port }}?encryption=none&security=reality&sni=www.google.com&fp=chrome&pbk={{ upstream_public_key }}&sid={{ upstream_short_id }}&type=xhttp&path=%2Fcdn%2Fassets%2Fmain.min.js#Upstream-Reality"
+          - "vless://{{ upstream_uuid }}@{{ ansible_host }}:{{ xray_inbound_port }}?encryption=none&security=reality&sni={{ upstream_sni }}&fp={{ client_fp }}&pbk={{ upstream_public_key }}&sid={{ upstream_short_id }}&type=xhttp&path={{ xhttp_path | urlencode }}#Upstream-Reality"
           - "==================================="
           - "Private Key in config: {{ upstream_private_key }}"
           - "Public Key in link: {{ upstream_public_key }}"

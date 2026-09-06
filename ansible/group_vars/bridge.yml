@@ -16,9 +16,11 @@ reality_server_names:
   - "dzen.ru"
   - "yandex.cloud"
 
+bridge_sni: "ya.ru"
+
 # xhttp settings
 xhttp_path: "/cdn/assets/main.min.js"
-xhttp_mode: "auto"
+xhttp_mode: "stream-up"
 xhttp_padding_bytes: "100-1000"
 
 # Upstream connection settings (bridge connects to upstream)
@@ -28,4 +30,5 @@ upstream_uuid: ""  # UUID from upstream server
 upstream_public_key: ""  # Public key from upstream server
 upstream_short_id: ""  # Short ID from upstream server
 upstream_sni: "www.google.com"
-upstream_fp: "chrome"
+upstream_fp: "firefox"
+client_fp: "firefox"

@@ -162,7 +162,7 @@
       debug:
         msg:
           - "==================================="
-          - "vless://{{ bridge_uuid }}@{{ ansible_host }}:{{ xray_inbound_port }}?encryption=none&security=reality&sni=ya.ru&fp=chrome&pbk={{ bridge_public_key }}&sid={{ bridge_short_id }}&type=xhttp&path=%2Fcdn%2Fassets%2Fmain.min.js#Bridge-Reality"
+          - "vless://{{ bridge_uuid }}@{{ ansible_host }}:{{ xray_inbound_port }}?encryption=none&security=reality&sni={{ bridge_sni }}&fp={{ client_fp }}&pbk={{ bridge_public_key }}&sid={{ bridge_short_id }}&type=xhttp&path={{ xhttp_path | urlencode }}#Bridge-Reality"
           - "==================================="
           - "Bridge Private Key: {{ bridge_private_key }}"
           - "Bridge Public Key: {{ bridge_public_key }}"

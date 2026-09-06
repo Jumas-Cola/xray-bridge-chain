@@ -34,7 +34,7 @@
                 },
                 "xhttpSettings": {
                     "path": "/cdn/assets/main.min.js",
-                    "mode": "auto",
+                    "mode": "stream-up",
                     "extra": {
                         "xPaddingBytes": "100-1000"
                     }
@@ -64,13 +64,13 @@
                 "security": "reality",
                 "realitySettings": {
                     "serverName": "www.google.com",
-                    "fingerprint": "chrome",
+                    "fingerprint": "firefox",
                     "publicKey": "UPSTREAM-PASSWORD",
                     "shortId": "UPSTREAM-SHORT-ID"
                 },
                 "xhttpSettings": {
                     "path": "/cdn/assets/main.min.js",
-                    "mode": "auto",
+                    "mode": "stream-up",
                     "extra": {
                         "xPaddingBytes": "100-1000"
                     }

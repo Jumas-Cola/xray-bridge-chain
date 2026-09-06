@@ -19,10 +19,14 @@ reality_server_names:
   - "docs.google.com"
   - "tagmanager.google.com"
 
+upstream_sni: "www.google.com"
+
 # xhttp settings
 xhttp_path: "/cdn/assets/main.min.js"
-xhttp_mode: "auto"
+xhttp_mode: "stream-up"
 xhttp_padding_bytes: "100-1000"
+
+client_fp: "firefox"
 
 # Outbound settings
 use_warp: true
