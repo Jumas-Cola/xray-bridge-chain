@@ -64,7 +64,7 @@
                 "security": "reality",
                 "realitySettings": {
                     "serverName": "www.google.com",
-                    "fingerprint": "firefox",
+                    "fingerprint": "randomized",
                     "publicKey": "UPSTREAM-PASSWORD",
                     "shortId": "UPSTREAM-SHORT-ID"
                 },

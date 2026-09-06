@@ -30,5 +30,5 @@ upstream_uuid: ""  # UUID from upstream server
 upstream_public_key: ""  # Public key from upstream server
 upstream_short_id: ""  # Short ID from upstream server
 upstream_sni: "www.google.com"
-upstream_fp: "firefox"
-client_fp: "firefox"
+upstream_fp: "randomized"
+client_fp: "randomized"
